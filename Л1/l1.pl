@@ -1,16 +1,26 @@
-% Факты: кто что изучает
-study(mark, math).
-study(misha, docs).
-study(masha, book).
+% Факты
+father(john, jim).
+father(john, ann).
+father(bob, mike).
+father(bob, lisa).
+father(mike, tom).
+father(mike, kate).
+father(jim, peter).
+father(david, emma).
 
-% Правило: X видит Y, если Y — это объект, который есть в списке у X
-see(masha, mouse).
-see(masha, book).
-see(masha, notebook).
-see(masha, mark).
+brother_fact(jim, ann).
+brother_fact(mike, lisa).
+brother_fact(tom, kate).
+brother_fact(peter, jim).
 
-% Простое правило: если A видит B, и B изучает C, то A знает, что B изучает C
-knows_about_study(A, B, Subject) :- see(A, B), study(B, Subject).
+% Правила
+brother(X, Y) :-
+    brother_fact(X, Y);
+    brother_fact(Y, X).
 
-% Цель для проверки (запрос):
-% ?- knows_about_study(masha, mark, What)
+is_father(X, Y) :- father(X, Y).
+
+uncle(X, Y) :-
+    brother(X, Parent),
+    is_father(Parent, Y),
+    X \= Y.
